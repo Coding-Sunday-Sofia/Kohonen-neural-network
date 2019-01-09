@@ -43,7 +43,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- * Obiect containing learning data. Data are stored as array with double values.
+ * Object containing learning data. Data are stored as array with double values.
  * 
  * @author Janusz Rybarski
  */

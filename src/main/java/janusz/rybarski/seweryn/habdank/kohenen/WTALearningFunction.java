@@ -69,7 +69,7 @@ public class WTALearningFunction {
 	 * @param networkModel    network model
 	 * @param maxIteration    iteration number
 	 * @param metrics         metrics
-	 * @param learningData    learnig data
+	 * @param learningData    learning data
 	 * @param functionalModel functional model
 	 * @see MetricModel
 	 * @see LearningData

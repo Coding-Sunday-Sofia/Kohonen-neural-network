@@ -39,11 +39,14 @@ package janusz.rybarski.seweryn.habdank.networks;
 import janusz.rybarski.seweryn.habdank.kohenen.LearningData;
 import janusz.rybarski.seweryn.habdank.kohenen.WTMLearningFunction;
 import janusz.rybarski.seweryn.habdank.learning.ConstantFunctionalFactor;
+import janusz.rybarski.seweryn.habdank.learning.GaussFunctionalFactor;
+import janusz.rybarski.seweryn.habdank.learning.LearningFactorFunctionalModel;
 import janusz.rybarski.seweryn.habdank.learning.LinearFunctionalFactor;
 import janusz.rybarski.seweryn.habdank.kohenen.WTALearningFunction;
 import janusz.rybarski.seweryn.habdank.topology.GaussNeighbourhoodFunction;
 import janusz.rybarski.seweryn.habdank.metrics.EuclidesMetric;
 import janusz.rybarski.seweryn.habdank.topology.MatrixTopology;
+import janusz.rybarski.seweryn.habdank.topology.NeighbourhoodFunctionModel;
 import janusz.rybarski.seweryn.habdank.kohenen.DefaultNetworkModel;
 
 /**
@@ -51,51 +54,65 @@ import janusz.rybarski.seweryn.habdank.kohenen.DefaultNetworkModel;
  * 
  * @author Janusz Rybarski e-mail: janusz.rybarski AT ae DOT krakow DOT pl
  * @author Seweryn Habdank-Wojewodzki e-mail: habdank AT megapolis DOT pl
+ * 
  * @version 1.0 2006/05/02
  */
-
 public class NeuralNetworks {
 
-	/** Creates a new instance of NeuralNetworks */
-	public NeuralNetworks() {
+	/** Creates a new instance of the class. */
+	private NeuralNetworks() {
 	}
 
 	public static void main(String[] args) {
-		int radius = 3; // neighbourhood size
-		int maxIteration = 10; // max number of iteraiton
+		/* Neighborhood size. */
+		int radius = 3;
 
-		System.out.println("Neural Network ver. 0.1 alpha");
-		LearningData fileData = new LearningData("c:/trainning_data.txt"); // load sample data
-		System.out.println("Generating new Network ....");
-		MatrixTopology topology = new MatrixTopology(10, 10, radius); // creating new Matrics topology
-		double[] maxWeight = { 200, 100 }; // weight interval from which random weigh are calculated
+		/* Max number of iteration. */
+		int iterations = 10;
 
-		// Create new network with random weight from definied interval and specified
-		// topology
-		DefaultNetworkModel network = new DefaultNetworkModel(2, maxWeight, topology); // generate network with 2
-																						// weights (input for each
-																						// neuron)
+		System.out.println("Neural Network v.0.0.1 (alpha).");
 
-		System.out.println("Network was generated");
-		ConstantFunctionalFactor constantFactor = new ConstantFunctionalFactor(0.8); // constatn learning factor
-		GaussNeighbourhoodFunction neighboorhoodFunciton = new GaussNeighbourhoodFunction(radius); // Gause
-																									// neighbourhood
-																									// function
+		/* Load sample data. */
+		LearningData data = new LearningData("./dat/trainning_data.txt");
+
+		System.out.println("Generating new network ...");
+
+		/* Creating new matrices topology. */
+		MatrixTopology topology = new MatrixTopology(10, 10, radius);
+
+		/* Weight interval from which random weigh are calculated. */
+		double[] interval = { 200, 100 };
 
 		/*
-		 * Create WTA (Winer Takes All) learning algorythm for specified network, number
-		 * of iteration, Euclides metrics funciton, specified learning data (fileData)
-		 * and constatn learning factor
+		 * Create new network with random weight from defined interval and specified
+		 * topology. Generate network has 2 weights (input for each neuron).
 		 */
+		DefaultNetworkModel network = new DefaultNetworkModel(interval.length, interval, topology);
 
-		WTALearningFunction learning = new WTALearningFunction(network, maxIteration, new EuclidesMetric(), fileData,
-				constantFactor); // WTA learnig algorythm
+		System.out.println("Network was generated ...");
 
-		System.out.println("Learning .....");
-		// learning.setShowComments(true); // show commentst diuring learning
-		learning.learn(); // start learning
-		System.out.println("Learning was finished");
-		System.out.println(network); // print the neurons weights
-		network.networkToFile("c:/network_after.txt"); // save weight after learning
+		/* Constant learning factor. */
+		LearningFactorFunctionalModel factor = new GaussFunctionalFactor(0.8);
+
+		/*
+		 * Create WTA (Winer Takes All) learning algorithm for specified network, number
+		 * of iteration, Euclides metric metrics function, specified learning data
+		 * (fileData) and constant learning factor.
+		 */
+		WTALearningFunction learning = new WTALearningFunction(network, iterations, new EuclidesMetric(), data, factor);
+
+		System.out.println("Learning ...");
+
+		/* Show comments during learning. */
+//		 learning.setShowComments(true);
+		learning.learn();
+
+		System.out.println("Learning was finished ...");
+
+		/* Print the neurons weights. */
+		System.out.println(network);
+
+		/* Save weight after learning. */
+		network.networkToFile("./dat/network_after.txt");
 	}
 }

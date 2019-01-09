@@ -49,6 +49,16 @@ public class GaussFunctionalFactor implements LearningFactorFunctionalModel {
 	private double r; // radius
 
 	/**
+	 * Constructor with parameters.
+	 * 
+	 * @param r Radius.
+	 */
+	public GaussFunctionalFactor(double r) {
+		super();
+		this.r = r;
+	}
+	
+	/**
 	 * Return array containing parameter <I>r</I> - radius
 	 * 
 	 * @return constant parameter
